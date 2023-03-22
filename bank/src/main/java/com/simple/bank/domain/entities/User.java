@@ -25,7 +25,9 @@ public class User {
             orphanRemoval = true
     )
     private List<Account> accounts;
-
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
     public User() {
     }
 
@@ -35,6 +37,7 @@ public class User {
         this.password = user.getPassword();
         this.email = user.getEmail();
         this.accounts = user.getAccounts();
+        this.roles = user.getRoles();
     }
 
     public long getId() {
@@ -75,5 +78,13 @@ public class User {
 
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

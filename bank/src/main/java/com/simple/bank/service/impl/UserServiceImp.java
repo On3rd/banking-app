@@ -33,4 +33,7 @@ public class UserServiceImp implements UserService {
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         return userRepository.save(user);
     }
+    public boolean hasValidPassword(User user, String pwd) {
+        return passwordEncoder.matches(pwd, user.getPassword());
+    }
 }
