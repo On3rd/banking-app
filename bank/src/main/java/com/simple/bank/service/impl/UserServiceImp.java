@@ -25,7 +25,7 @@ public class UserServiceImp implements UserService {
     public Optional<User> findUserByEmail(String email) {
         return userRepository.findUserByEmail(email);
     }
-
+    @Override
     public User registerUser(UserDTO userDTO) {
         User user = new User();
         user.setUsername(userDTO.getUsername());

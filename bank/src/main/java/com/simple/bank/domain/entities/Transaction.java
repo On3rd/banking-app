@@ -42,6 +42,14 @@ public class Transaction {
         this.insert_date = insert_date;
     }
 
+    public Transaction(Account account, double amount, String comment, String transactionType, Date date) {
+        this.account = account;
+        this.amount = amount;
+        this.comment = comment;
+        this.transaction_type = transactionType;
+        this.insert_date = date;
+    }
+
     public long getId() {
         return id;
     }

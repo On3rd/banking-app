@@ -46,6 +46,13 @@ public class Account {
         this.account_type = account_type;
         this.insert_date = insert_date;
     }
+    public Account(User user, double balance, boolean active, String account_type, Date insert_date) {
+        this.user = user;
+        this.balance = balance;
+        this.active = active;
+        this.account_type = account_type;
+        this.insert_date = insert_date;
+    }
 
     public long getId() {
         return id;
