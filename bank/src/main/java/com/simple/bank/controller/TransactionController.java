@@ -93,19 +93,25 @@ public class TransactionController {
     @GetMapping("/deposit/{account_id}")
     public String getAccountDeposit(@PathVariable("account_id") long account_id,
                                  Model model) {
+        depositDTO = new DepositDTO();
         depositDTO.setAccount_id(account_id);
+        model.addAttribute("depositDTO",depositDTO);
         return "deposit-form";
     }
     @GetMapping("/withdraw/{account_id}")
     public String getAccountWithdraw(@PathVariable("account_id") long account_id,
                                   Model model) {
+        withdrawalDTO = new WithdrawalDTO();
         withdrawalDTO.setAccount_id(account_id);
+        model.addAttribute("withdrawalDTO",withdrawalDTO);
         return "withdraw-form";
     }
     @GetMapping("/transfer/{account_id}")
     public String getAccountTransfer(@PathVariable("account_id") long account_id,
                                   Model model) {
+        transferDTO = new TransferDTO();
         transferDTO.setAccount_id(account_id);
+        model.addAttribute("transferDTO",transferDTO);
         return "transfer-form";
     }
 
@@ -177,9 +183,8 @@ public class TransactionController {
                 model.addAttribute("minBalanceError", "minBalanceError");
             }
         }else{
-            newOverdraft = overdraft - account.getBalance();
             newBalance = account.getBalance() - amount;
-            if (newBalance >= newOverdraft) {
+            if (newBalance >= overdraft) {
                 account.setBalance(newBalance);
                 accountRepository.save(account);
                 transactionRepository.save(transaction);

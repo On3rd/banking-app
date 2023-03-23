@@ -2,11 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="components/header :: header"></head>
 <body>
-<nav th:replace="components/nav-bar :: nav-bar"></nav>
+<nav th:replace="components/nav-bar-logged-in :: nav-bar-logged-in"></nav>
 <div class="container">
-  <div class="row">
-    <div class="col-lg-12 text-center">
-      <h1>Simple bank application</h1>
+  <div th:if="${minDepositToCreateAccountError}">
+    <div class="alert alert-danger">
+      The minimum deposit to create an account is R1000.00.
     </div>
   </div>
   <div class="row">

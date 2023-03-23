@@ -60,13 +60,24 @@ public class ParentController {
         String username = customUserDetails.getUsername();
         User user = userService.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("User with username=%s was not found", username)));
-        Account account;
+        Account account = new Account();
         if(AccountTypes.SAVINGS_ACCOUNT.getName().equals(accountDTO.getAccountType())) {
-            account = new Account(user, accountDTO.getAmount(), activateAccount(accountDTO), accountDTO.getAccountType(),new Date());
+            if(accountDTO.getAmount() >= minBalance) {
+                account = new Account(user, accountDTO.getAmount(), activateAccount(accountDTO), accountDTO.getAccountType(), new Date());
+                model.addAttribute("accountCreationSuccess","accountCreationSuccess");
+                model.addAttribute("accountDTO",new AccountDTO() );
+                accountRepository.save(account);
+            }else {
+                model.addAttribute("minDepositToCreateAccountError","minDepositToCreateAccountError");
+                return "index";
+            }
         }else{
             account = new Account(user, accountDTO.getAmount(), true, accountDTO.getAccountType(),new Date());
+            model.addAttribute("accountCreationSuccess","accountCreationSuccess");
+            model.addAttribute("accountDTO",new AccountDTO() );
+            accountRepository.save(account);
         }
-        accountRepository.save(account);
+
         return "redirect:/";
     }
     public boolean activateAccount(AccountDTO accountDTO){
