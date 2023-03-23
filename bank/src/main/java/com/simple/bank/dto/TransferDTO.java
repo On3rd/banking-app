@@ -18,6 +18,9 @@ public class TransferDTO {
     @NotEmpty
     private String comment;
 
+    public TransferDTO() {
+    }
+
     public long getAccount_id() {
         return account_id;
     }

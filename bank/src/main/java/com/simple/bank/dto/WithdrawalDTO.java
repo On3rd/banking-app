@@ -14,6 +14,9 @@ public class WithdrawalDTO {
     @NotEmpty
     private String comment;
 
+    public WithdrawalDTO() {
+    }
+
     public long getAccount_id() {
         return account_id;
     }

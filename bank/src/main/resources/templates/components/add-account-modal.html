@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="components/header :: header"></head>
+
+<body>
+<nav class="navbar navbar-inverse" th:fragment="nav-bar"></nav>
+  <div id="addAccount" class="modal fade" role="dialog" th:fragment="add-account-modal">
+    <div class="modal-dialog modal-sm">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Add Account</h4>
+        </div>
+        <div class="modal-body">
+          <form th:object="${accountDTO}" th:action="@{/add-account}" method="post">
+
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <div class="form-group">
+              <label>Deposit</label>
+              <input type="text" class="form-control" id="balance"
+                     name="balance" placeholder="Card Balance" th:field="*{amount}" th:errorclass="is-invalid" required>
+            </div>
+            <div class="form-group">
+              <label>Account type</label>
+              <select class="form-control" id="account-type" th:field="*{accountType}" required>
+                <option value="Savings Account">Savings Account</option>
+                <option value="Current Account">Current Account</option>
+              </select>
+            </div>
+            <button id="addBtn" type="submit" class="btn btn-md btn-success btn-block">Add</button>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

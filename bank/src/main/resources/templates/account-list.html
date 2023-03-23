@@ -19,8 +19,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <span th:if="${#lists.isEmpty(currentUserCards)}" >You have no cards</span>
-                <tr th:each="account: ${currentUserCards}">
+                <span th:if="${#lists.isEmpty(currentUserAccounts)}" >You have no accounts</span>
+                <tr th:each="account: ${currentUserAccounts}">
                     <td th:text="${account.insert_date}" />
                     <td th:text="${account.id}" />
                     <td><strong th:text="${account.balance}"></strong></td>

@@ -9,31 +9,11 @@
       <h1>Simple bank application</h1>
     </div>
   </div>
-  <div th:if="${insufficientFundsError}">
-    <div class="alert alert-danger">
-      You do not have enough funds to complete this transaction
-    </div>
-  </div>
-  <div th:if="${successfulTransaction}">
-    <div class="alert alert-success">
-      The transaction was successful
-    </div>
-  </div>
-  <div th:if="${minBalanceError}">
-    <div class="alert alert-danger">
-      Your account has to have a minimum balance of R1000.00
-    </div>
-  </div>
-  <div th:if="${maxOverDraftBalanceError}">
-    <div class="alert alert-danger">
-      You've went over your overdraft limit.
-    </div>
-  </div>
   <div class="row">
       <div class="panel panel-default">
         <div class="panel-heading"><h3 class="panel-title"><strong>Account</strong></h3></div>
         <div class="panel-body">
-          <table th:replace="components/account-list :: account-list"></table>
+          <table th:replace="account-list :: account-list"></table>
           <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addAccount">
             <span class="glyphicon glyphicon-plus"></span> Account</button>
           <div th:replace="components/add-account-modal :: add-account-modal"></div>

@@ -5,11 +5,13 @@
 <nav th:replace="components/nav-bar :: nav-bar"></nav>
 <div class="container" style="margin-top:30px">
     <div class="row">
-        <div class="col-md-10">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="panel-title"><strong>Deposit</strong></h3></div>
+            <div class="panel-body">
             <table class="table table-striped text-center">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-                <thead th:if="${!#lists.isEmpty(cardTransactions)}">
+                <thead th:if="${!#lists.isEmpty(accountTransactions)}">
                 <tr>
                     <th class="text-center">Date</th>
                     <th class="text-center">Account No</th>
@@ -19,8 +21,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <span th:if="${#lists.isEmpty(cardTransactions)}" >You have no transactions</span>
-                <tr th:each="transaction: ${cardTransactions}">
+                <span th:if="${#lists.isEmpty(accountTransactions)}" >You have no transactions</span>
+                <tr th:each="transaction: ${accountTransactions}">
                     <td th:text="${transaction.insert_date}" />
                     <td th:text="${transaction.account_no}" />
                     <td th:text="${transaction.comment}" />
@@ -29,8 +31,14 @@
                 </tr>
                 </tbody>
             </table>
-        </div>
+            </div>
+            </div>
     </div>
+    <br/>
+    <div class="row">
+        <a th:href="@{/}" class="btn btn-primary" role="button">back</a></td>
+    </div>
+
 </div>
 </body>
 </html>

@@ -88,29 +88,29 @@ public class TransactionController {
         List<Transaction> accountTransactions = transactionService.findTransactionByAccountId(account_id);
         model.addAttribute("accountTransactions", accountTransactions);
         transactionDTO.setAccount_id(account_id);
-        return "transactions";
+        return "transactions-list";
     }
     @GetMapping("/deposit/{account_id}")
     public String getAccountDeposit(@PathVariable("account_id") long account_id,
                                  Model model) {
         depositDTO.setAccount_id(account_id);
-        return "deposit";
+        return "deposit-form";
     }
     @GetMapping("/withdraw/{account_id}")
     public String getAccountWithdraw(@PathVariable("account_id") long account_id,
                                   Model model) {
         withdrawalDTO.setAccount_id(account_id);
-        return "withdraw";
+        return "withdraw-form";
     }
     @GetMapping("/transfer/{account_id}")
     public String getAccountTransfer(@PathVariable("account_id") long account_id,
                                   Model model) {
         transferDTO.setAccount_id(account_id);
-        return "transfer";
+        return "transfer-form";
     }
 
     @PostMapping("/deposit")
-    public String depositAmount(@ModelAttribute("depositDTO") DepositDTO depositDTO) {
+    public String depositAmount(@ModelAttribute("depositDTO") DepositDTO depositDTO,Model model) {
         long accountId = depositDTO.getAccount_id();
         double amount = depositDTO.getAmount();
         String transactionType = TransactionTypes.DEPOSIT.getName();
@@ -123,12 +123,15 @@ public class TransactionController {
             account.setBalance(account.getBalance() + amount);
             accountRepository.save(account);
             transactionRepository.save(transaction);
+            model.addAttribute("depositDTO",new DepositDTO());
+            model.addAttribute("successfulTransaction", "successfulTransaction");
+
         }
 
-        return "redirect:/";
+        return "deposit-form";
     }
     @PostMapping("/withdraw")
-    public String withdrawAmount(@ModelAttribute("withdrawalDTO") WithdrawalDTO withdrawalDTO) {
+    public String withdrawAmount(@ModelAttribute("withdrawalDTO") WithdrawalDTO withdrawalDTO,Model model) {
         long accountId = withdrawalDTO.getAccount_id();
         double amount = withdrawalDTO.getAmount();
         String transactionType = TransactionTypes.WITHDRAWAL.getName();
@@ -138,13 +141,14 @@ public class TransactionController {
 
         if (account != null) {
             Transaction transaction = new Transaction(account, amount, comment,transactionType,new Date());
-            transferOrWithdraw(account,amount,transaction);
+            model.addAttribute("withdrawalDTO",new WithdrawalDTO());
+            transferOrWithdraw(account,amount,transaction,model);
         }
 
-        return "redirect:/";
+        return "withdraw-form";
     }
     @PostMapping("/transfer")
-    public String transferMoney(@ModelAttribute("transferDTO") TransferDTO transferDTO) {
+    public String transferMoney(@ModelAttribute("transferDTO") TransferDTO transferDTO,Model model) {
         long accountId = transferDTO.getAccount_id();
         double amount = transferDTO.getAmount();
         String transactionType = TransactionTypes.TRANSFER.getName();
@@ -154,19 +158,23 @@ public class TransactionController {
 
         if (account != null) {
             Transaction transaction = new Transaction(account,account_no, amount, comment,transactionType,new Date());
-            transferOrWithdraw(account,amount,transaction);
-        }
+            model.addAttribute("transferDTO",new TransferDTO());
+            transferOrWithdraw(account,amount,transaction,model);
+            }
 
-        return "redirect:/";
+        return "transfer-form";
     }
 
-    public String transferOrWithdraw(Account account,double amount,Transaction transaction){
+    public void transferOrWithdraw(Account account,double amount,Transaction transaction,Model model){
         if(AccountTypes.SAVINGS_ACCOUNT.getName().equals(account.getAccount_type())) {
             newBalance = account.getBalance() - amount;
             if (newBalance >= minBalance) {
                 account.setBalance(newBalance);
                 accountRepository.save(account);
                 transactionRepository.save(transaction);
+                model.addAttribute("successfulTransaction", "successfulTransaction");
+            }else {
+                model.addAttribute("minBalanceError", "minBalanceError");
             }
         }else{
             newOverdraft = overdraft - account.getBalance();
@@ -175,9 +183,11 @@ public class TransactionController {
                 account.setBalance(newBalance);
                 accountRepository.save(account);
                 transactionRepository.save(transaction);
+                model.addAttribute("successfulTransaction", "successfulTransaction");
+            }else{
+                model.addAttribute("maxOverDraftBalanceError", "maxOverDraftBalanceError");
             }
         }
-        return "redirect:/";
     }
 
 }

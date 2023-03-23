@@ -13,6 +13,9 @@ public class DepositDTO {
     private String comment;
     private long account_id;
 
+    public DepositDTO() {
+    }
+
     public double getAmount() {
         return amount;
     }
